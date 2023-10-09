@@ -3,7 +3,7 @@ import { User } from '../models/user.model';
 
 export interface UsersStateModel {
   loading: boolean;
-  iltCourses: User[];
+  users: User[];
   total: number;
   paginationParams: IPageable;
 }
