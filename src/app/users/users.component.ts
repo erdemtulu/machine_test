@@ -3,7 +3,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Actions, ofActionDispatched, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { interval, Observable, takeWhile } from 'rxjs';
 import { User } from './models/user.model';
-import { AddUserFromNewUsers, FavorUser, GetUsers, UnfavorUser } from './state/users.actions';
+import { AddUserFromNewUsers, FavorUser, GetNewUsers, GetUsers, UnfavorUser } from './state/users.actions';
 import { UsersState } from './state/users.state';
 
 @Component({
@@ -34,10 +34,10 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.actions$
-      .pipe(ofActionDispatched(GetUsers, AddUserFromNewUsers), untilDestroyed(this))
+      .pipe(ofActionDispatched(GetUsers, GetNewUsers), untilDestroyed(this))
       .subscribe(() => (this.loading = true));
     this.actions$
-      .pipe(ofActionSuccessful(GetUsers, AddUserFromNewUsers), untilDestroyed(this))
+      .pipe(ofActionSuccessful(GetUsers, GetNewUsers), untilDestroyed(this))
       .subscribe(() => (this.loading = false));
     this.store.dispatch(new GetUsers());
     this.favoriteUsersIds$.pipe(untilDestroyed(this)).subscribe((res) => (this.favoriteUsersIds = res));
