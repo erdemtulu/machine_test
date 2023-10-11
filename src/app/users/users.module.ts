@@ -7,10 +7,12 @@ import { NgxsModule } from '@ngxs/store';
 import { UsersState } from './state/users.state';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FavoritesComponent } from './favorites/favorites.component';
 
 @NgModule({
-  declarations: [UsersComponent],
+  declarations: [UsersComponent, FavoritesComponent],
   imports: [
     CommonModule,
     UsersRoutingModule,
@@ -19,6 +21,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NzSwitchModule,
     ReactiveFormsModule,
     FormsModule,
+    NzIconModule,
   ],
 })
 export class UsersModule {}

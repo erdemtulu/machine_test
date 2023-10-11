@@ -12,6 +12,7 @@ import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 registerLocaleData(en);
 
@@ -25,7 +26,8 @@ registerLocaleData(en);
     NgxsModule.forRoot([], {
       developmentMode: true,
     }),
-    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsReduxDevtoolsPluginModule.forRoot({ disabled: false }),
+    NgxsLoggerPluginModule.forRoot(),
     FormsModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],

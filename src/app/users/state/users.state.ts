@@ -4,7 +4,7 @@ import { interval, lastValueFrom, tap } from 'rxjs';
 import { IPageable } from 'src/app/models/core.model';
 import { User } from '../models/user.model';
 import { UsersService } from '../service/users.service';
-import { AddUserFromNewUsers, GetNewUsers, GetUsers } from './users.actions';
+import { AddUserFromNewUsers, FavorUser, GetNewUsers, GetUsers, UnfavorUser } from './users.actions';
 
 export interface UsersStateModel {
   loading: boolean;
@@ -13,6 +13,7 @@ export interface UsersStateModel {
   paginationParams: IPageable;
   pageForGetUser: number;
   newUsers: User[];
+  favoriteUsers: User[];
   total_pages: number;
 }
 
@@ -25,6 +26,7 @@ export interface UsersStateModel {
     paginationParams: { limit: 10, page: 1, filter: '' },
     pageForGetUser: 1,
     newUsers: [],
+    favoriteUsers: [],
     total_pages: 0,
   },
 })
@@ -40,6 +42,16 @@ export class UsersState {
   @Selector([UsersState])
   static newUsers(state: UsersStateModel) {
     return state.newUsers;
+  }
+
+  @Selector([UsersState])
+  static favoriteUsers(state: UsersStateModel) {
+    return state.favoriteUsers;
+  }
+
+  @Selector([UsersState])
+  static favoriteUsersIds(state: UsersStateModel) {
+    return state.favoriteUsers.map((u) => u.id);
   }
 
   @Action(GetUsers)
@@ -92,5 +104,26 @@ export class UsersState {
       users: [userToBeAdded, ...users.slice(0, -1)],
       newUsers: updatedNewUsers,
     });
+  }
+
+  @Action(FavorUser)
+  favorUser({ getState, patchState }: StateContext<UsersStateModel>, { user }: FavorUser) {
+    const { favoriteUsers } = getState();
+    patchState({
+      favoriteUsers: [...favoriteUsers, user],
+    });
+  }
+
+  @Action(UnfavorUser)
+  unfavorUser({ getState, patchState }: StateContext<UsersStateModel>, { id }: UnfavorUser) {
+    const { favoriteUsers } = getState();
+    const index = favoriteUsers.findIndex((u) => u.id === id);
+    if (index !== -1) {
+      const cloneArr = [...favoriteUsers];
+      cloneArr.splice(index, 1);
+      patchState({
+        favoriteUsers: cloneArr,
+      });
+    }
   }
 }

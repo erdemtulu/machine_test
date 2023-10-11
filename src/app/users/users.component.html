@@ -1,5 +1,6 @@
 <nz-switch [(ngModel)]="switchValue" (ngModelChange)="toggled($event)"></nz-switch>
-<nz-table #usersTable [nzData]="(users$ | async) ?? []" [nzLoading]="loading">
+<button [routerLink]="['/', 'favorites']">favors</button>
+<nz-table #usersTable [nzData]="(users$ | async) ?? []" [nzLoading]="loading" nzShowPagination="false">
   <thead>
     <tr>
       <th>avatar</th>
@@ -7,6 +8,7 @@
       <th>Email</th>
       <th>First Name</th>
       <th>Last Name</th>
+      <th nzWidth="78px" nzRight></th>
     </tr>
   </thead>
   <tbody>
@@ -16,6 +18,14 @@
       <td>{{ user.email }}</td>
       <td>{{ user.first_name }}</td>
       <td>{{ user.last_name }}</td>
+      <td>
+        <span
+          nz-icon
+          nzType="star"
+          [nzTheme]="isFavored(user.id) ? 'fill' : 'outline'"
+          class="favor"
+          (click)="onFavorClicked(user)"></span>
+      </td>
     </tr>
   </tbody>
 </nz-table>
