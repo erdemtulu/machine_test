@@ -1,3 +1,4 @@
+<nz-switch [(ngModel)]="switchValue" (ngModelChange)="toggled($event)"></nz-switch>
 <nz-table #usersTable [nzData]="(users$ | async) ?? []" [nzLoading]="loading">
   <thead>
     <tr>

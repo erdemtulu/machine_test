@@ -2,8 +2,10 @@ export class GetUsers {
   static readonly type = '[Users] Get Users';
 }
 
-export class GetUser {
-  static readonly type = '[Users] Get User';
+export class GetNewUsers {
+  static readonly type = '[Users] Get New User';
+}
 
-  constructor(public readonly payload: { id: string }) {}
+export class AddUserFromNewUsers {
+  static readonly type = '[Users] Add User From New Users';
 }

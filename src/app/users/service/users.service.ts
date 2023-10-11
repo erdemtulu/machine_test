@@ -10,10 +10,10 @@ import { User } from '../models/user.model';
 export class UsersService {
   constructor(private readonly http: HttpClient) {}
 
-  getUsers(pageable: IPageable): Observable<{ data: User[]; total: number }> {
+  getUsers(pageable: IPageable): Observable<{ data: User[]; total: number; total_pages: number }> {
     const url = 'https://reqres.in/api/users';
     const params = this.prepareParams(pageable);
-    return this.http.get<{ data: User[]; total: number }>(url, {
+    return this.http.get<{ data: User[]; total: number; total_pages: number }>(url, {
       params,
     });
   }
