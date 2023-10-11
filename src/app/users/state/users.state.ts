@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { interval, lastValueFrom, tap } from 'rxjs';
+import { lastValueFrom, tap } from 'rxjs';
 import { IPageable } from 'src/app/models/core.model';
 import { User } from '../models/user.model';
 import { UsersService } from '../service/users.service';
@@ -56,7 +56,8 @@ export class UsersState {
 
   @Action(GetUsers)
   getUsers({ patchState, getState }: StateContext<UsersStateModel>) {
-    const { paginationParams } = getState();
+    const { paginationParams, users } = getState();
+    if (users.length) return;
     return this.userService.getUsers(paginationParams).pipe(
       tap((results: { data: User[]; total: number; total_pages: number }) => {
         if (results.data) {

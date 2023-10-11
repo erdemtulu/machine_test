@@ -1,5 +1,8 @@
-<nz-switch [(ngModel)]="switchValue" (ngModelChange)="toggled($event)"></nz-switch>
-<button [routerLink]="['/', 'favorites']">favors</button>
+<div class="top-container">
+  <nz-switch [(ngModel)]="switchValue" (ngModelChange)="toggled($event)"></nz-switch>
+  <span class="toggle-label">{{ switchValue ? 'Fetching new users ...' : 'Toggle to start fetching new users' }}</span>
+  <button nz-button [routerLink]="['/', 'favorites']" class="favbtn">Open Favorite Users</button>
+</div>
 <nz-table #usersTable [nzData]="(users$ | async) ?? []" [nzLoading]="loading" nzShowPagination="false">
   <thead>
     <tr>
