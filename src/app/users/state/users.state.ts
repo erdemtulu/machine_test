@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { catchError, lastValueFrom, of, tap } from 'rxjs';
+import { catchError, lastValueFrom, tap } from 'rxjs';
 import { IPageable } from 'src/app/models/core.model';
 import { User } from '../models/user.model';
 import { UsersService } from '../service/users.service';
