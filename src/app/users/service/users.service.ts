@@ -22,7 +22,7 @@ export class UsersService {
     let params = new HttpParams();
 
     if (pageable) {
-      const { page, limit, filter } = pageable;
+      const { page, limit } = pageable;
 
       if (page) {
         params = params.append('page', page.toString());
@@ -30,10 +30,6 @@ export class UsersService {
 
       if (limit) {
         params = params.append('per_page', limit.toString());
-      }
-
-      if (filter) {
-        params = params.append('filter', filter.toString());
       }
     }
 

@@ -7,7 +7,6 @@ import { UsersService } from '../service/users.service';
 import { AddUserFromNewUsers, FavorUser, GetNewUsers, GetUsers, UnfavorUser } from './users.actions';
 
 export interface UsersStateModel {
-  loading: boolean;
   users: User[];
   total: number;
   paginationParams: IPageable;
@@ -20,10 +19,9 @@ export interface UsersStateModel {
 @State<UsersStateModel>({
   name: 'users',
   defaults: {
-    loading: false,
     users: [],
     total: 0,
-    paginationParams: { limit: 10, page: 1, filter: '' },
+    paginationParams: { limit: 10, page: 1 },
     pageForGetUser: 1,
     newUsers: [],
     favoriteUsers: [],
@@ -77,7 +75,6 @@ export class UsersState {
     const pageParams: IPageable = {
       limit: paginationParams.limit,
       page: pageForGetUser,
-      filter: '',
     };
     return this.userService.getUsers(pageParams).pipe(
       tap((results: { data: User[]; total: number }) => {
