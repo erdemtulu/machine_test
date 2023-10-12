@@ -26,8 +26,8 @@
           nz-icon
           nzType="star"
           [nzTheme]="isFavored(user.id) ? 'fill' : 'outline'"
-          class="favor"
-          (click)="onFavorClicked(user)"></span>
+          class="{{ isFavored(user.id) || !isFavorDisabled ? 'favor' : 'favor-disabled' }}"
+          (click)="isFavored(user.id) || !isFavorDisabled ? onFavorClicked(user) : false"></span>
       </td>
     </tr>
   </tbody>

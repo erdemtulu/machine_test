@@ -30,6 +30,7 @@ export class UsersComponent implements OnInit {
   favoriteUsersIds$: Observable<number[]>;
 
   favoriteUsersIds: number[];
+  isFavorDisabled = false;
   switchValue = false;
 
   ngOnInit(): void {
@@ -44,7 +45,10 @@ export class UsersComponent implements OnInit {
       .subscribe(() => ((this.loading = false), alert('Error getting users')));
 
     this.store.dispatch(new GetUsers());
-    this.favoriteUsersIds$.pipe(untilDestroyed(this)).subscribe((res) => (this.favoriteUsersIds = res));
+    this.favoriteUsersIds$.pipe(untilDestroyed(this)).subscribe((res) => {
+      this.favoriteUsersIds = res;
+      this.isFavorDisabled = res.length === 10;
+    });
   }
 
   toggled(e: boolean) {
