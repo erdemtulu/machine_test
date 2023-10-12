@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { lastValueFrom, tap } from 'rxjs';
+import { catchError, lastValueFrom, of, tap } from 'rxjs';
 import { IPageable } from 'src/app/models/core.model';
 import { User } from '../models/user.model';
 import { UsersService } from '../service/users.service';
@@ -66,6 +66,9 @@ export class UsersState {
           });
         }
       }),
+      catchError((error) => {
+        throw new Error(error?.message);
+      }),
     );
   }
 
@@ -83,6 +86,9 @@ export class UsersState {
             newUsers: results.data,
           });
         }
+      }),
+      catchError((error) => {
+        throw new Error(error?.message);
       }),
     );
   }
