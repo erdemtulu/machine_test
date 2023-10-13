@@ -4,14 +4,13 @@ import { catchError, lastValueFrom, tap } from 'rxjs';
 import { IPageable } from 'src/app/models/core.model';
 import { User } from '../models/user.model';
 import { UsersService } from '../service/users.service';
-import { AddUserFromNewUsers, FavorUser, GetNewUsers, GetUsers, UnfavorUser } from './users.actions';
+import { FavorUser, GetNewUsers, GetUsers, UnfavorUser } from './users.actions';
 
 export interface UsersStateModel {
   users: User[];
   total: number;
   paginationParams: IPageable;
   pageForGetUser: number;
-  newUsers: User[];
   favoriteUsers: User[];
   total_pages: number;
 }
@@ -23,7 +22,6 @@ export interface UsersStateModel {
     total: 0,
     paginationParams: { limit: 10, page: 1 },
     pageForGetUser: 1,
-    newUsers: [],
     favoriteUsers: [],
     total_pages: 0,
   },
@@ -35,11 +33,6 @@ export class UsersState {
   @Selector([UsersState])
   static users(state: UsersStateModel) {
     return state.users;
-  }
-
-  @Selector([UsersState])
-  static newUsers(state: UsersStateModel) {
-    return state.newUsers;
   }
 
   @Selector([UsersState])
@@ -63,6 +56,7 @@ export class UsersState {
             users: results.data,
             total: results.total,
             total_pages: results.total_pages,
+            pageForGetUser: results.total,
           });
         }
       }),
@@ -74,16 +68,17 @@ export class UsersState {
 
   @Action(GetNewUsers)
   getNewUsers({ patchState, getState }: StateContext<UsersStateModel>) {
-    const { paginationParams, pageForGetUser } = getState();
+    const { pageForGetUser, users, total } = getState();
     const pageParams: IPageable = {
-      limit: paginationParams.limit,
+      limit: 1,
       page: pageForGetUser,
     };
     return this.userService.getUsers(pageParams).pipe(
       tap((results: { data: User[]; total: number }) => {
         if (results.data) {
           patchState({
-            newUsers: results.data,
+            users: [...results.data, ...users.slice(0, -1)],
+            pageForGetUser: pageForGetUser === 1 ? total : pageForGetUser - 1,
           });
         }
       }),
@@ -91,23 +86,6 @@ export class UsersState {
         throw new Error(error?.message);
       }),
     );
-  }
-
-  @Action(AddUserFromNewUsers)
-  async addUserFromNewUsers({ getState, patchState, dispatch }: StateContext<UsersStateModel>) {
-    const { newUsers, users, pageForGetUser, total_pages } = getState();
-    if (!newUsers.length) {
-      patchState({
-        pageForGetUser: pageForGetUser === total_pages ? 1 : pageForGetUser + 1,
-      });
-      await lastValueFrom(dispatch(new GetNewUsers()));
-    }
-    const updatedNewUsers = [...getState().newUsers];
-    const userToBeAdded: User = updatedNewUsers.pop()!;
-    patchState({
-      users: [userToBeAdded, ...users.slice(0, -1)],
-      newUsers: updatedNewUsers,
-    });
   }
 
   @Action(FavorUser)

@@ -8,10 +8,6 @@ export class GetNewUsers {
   static readonly type = '[Users] Get New User';
 }
 
-export class AddUserFromNewUsers {
-  static readonly type = '[Users] Add User From New Users';
-}
-
 export class FavorUser {
   static readonly type = '[Users] Favor User';
   constructor(public readonly user: User) {}
